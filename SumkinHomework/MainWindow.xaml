@@ -8,7 +8,6 @@
         Title="Parser" Height="450" Width="800">
     <Grid Margin="-3,0,2.6,0">
         <Button Content="Launch Selenium" HorizontalAlignment="Left" Margin="10,354,0,0" VerticalAlignment="Top" Width="104" Click="Button_Click" Height="56"/>
-        <TextBlock HorizontalAlignment="Left" Margin="9,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="258" Width="345" FontSize="27" ><Run Text="Здесь будет анализироваться посты с сайта "/><Run Text="habrhabr"/><Run Text=", заголовок и текст будут отображенны справа, все привет, я только проснулся!"/><LineBreak/></TextBlock>
         <TextBox x:Name="textBox1" HorizontalAlignment="Left" Height="45" Margin="391,74,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="392" RenderTransformOrigin="-3.348,-11.012"/>
         <Button x:Name="buttonTest" Content="Analize Post" HorizontalAlignment="Left" Margin="683,354,0,0" VerticalAlignment="Top" Width="101" Height="56" Click="Button_Click_1"/>
         <TextBox x:Name="textBox2" HorizontalAlignment="Left" Height="97" Margin="391,157,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="393" RenderTransformOrigin="-3.348,-11.012"/>
@@ -17,6 +16,8 @@
         <Button Content="Deserialize" HorizontalAlignment="Left" VerticalAlignment="Top" Width="100" Margin="683,10,0,0" Height="47" Click="Button_Click_2"/>
         <TextBlock HorizontalAlignment="Left" Margin="391,259,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Height="33" Width="392" FontSize="22"><Run Text="Cc"/><Run Text="ылки в посте, путь к каритинке"/><Run Text=":"/></TextBlock>
         <TextBox x:Name="textBox3"  HorizontalAlignment="Left" Height="35" Margin="391,297,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="392"/>
+        <CheckBox Content="CheckBox" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+        <CheckBox x:Name="disMult" Content="Disable Multitheading" HorizontalAlignment="Left" Margin="119,392,0,0" VerticalAlignment="Top" Height="18" RenderTransformOrigin="-0.511,0.58" Width="140"/>
 
     </Grid>
 </Window>

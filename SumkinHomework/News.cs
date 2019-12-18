@@ -16,8 +16,7 @@ namespace SumkinHomework
 
     class News
     {
-        [JsonProperty("Article")]
-        public String Article { get; set; }
+        public List<News> ContexPosts = new List<News>();
 
         [JsonProperty("Content")]
         public String Content { get; set; }
@@ -28,39 +27,73 @@ namespace SumkinHomework
         [JsonProperty("Source")]
         public List<String> Source { get; set; }
 
-        public News(IWebDriver Browser)
+        public News(IWebDriver Browser = null, String content = null, List<string> links = null, List<string> source = null)
         {
-            IWebElement postArticleFind = Browser.FindElement(By.CssSelector(".post.post_full h1.post__title span"));
-            IWebElement postContentFind = Browser.FindElement(By.CssSelector(".post.post_full .post__body.post__body_full .post__text"));
-
-            List<IWebElement> postLinksInContent = Browser.FindElements(By.CssSelector(".post.post_full .post__body.post__body_full .post__text a")).ToList();
-            List<IWebElement> postLinksToImages = Browser.FindElements(By.CssSelector(".post.post_full .post__body.post__body_full .post__text img")).ToList();
-
-            List<IWebElement> postSumLinks = postLinksInContent.Union(postLinksToImages).ToList();
-
-            List<string> postLinks = new List<string>();
-            List<string> postSourceImg = new List<string>();
-
-            foreach (IWebElement links in postSumLinks)
+        
+            if(Browser != null)
             {
-                if (links.GetAttribute("href") != null)
+                List<IWebElement> postContentFind = Browser.FindElements(By.CssSelector(".wall_post_cont._wall_post_cont .wall_post_text")).ToList();
+
+                foreach(IWebElement allPosts in postContentFind)
                 {
-                    postLinks.Add(links.GetAttribute("href"));
+                    bool check = Browser.FindElement(By.CssSelector(".wall_post_text a")).Displayed;
+                    if (Browser.FindElement(By.CssSelector(".wall_post_text a")).Displayed)
+                    {
+                        allPosts.Click();
+                    }
+                    allPosts.Click();
+
+                    System.Threading.Thread.Sleep(400);
+
+                    List<IWebElement> postContent = Browser.FindElements(By.CssSelector("#wk_content .wall_post_text")).ToList();
+                    IWebElement postText;
+
+                    if (!(postContent.Count > 0))
+                    {
+                        allPosts.Click();
+                        System.Threading.Thread.Sleep(400);
+                        postText = Browser.FindElement(By.CssSelector("#wk_content .wall_post_text"));
+
+                    } else {
+                        postText = Browser.FindElement(By.CssSelector("#wk_content .wall_post_text"));
+                    }
+                    List<IWebElement> postLinksInContent = Browser.FindElements(By.CssSelector(".wall_post_text a")).ToList();
+                    List<IWebElement> postLinksToImages = Browser.FindElements(By.CssSelector(".page_post_sized_thumbs a")).ToList();
+
+                    List<string> postLinks = new List<string>();
+                    List<string> postSourceImg = new List<string>();
+
+                    foreach (IWebElement path in postLinksToImages)
+                    {
+                        String src = path.GetCssValue("background-image");
+                        if (src != "" ||
+                           src != null)
+                            postSourceImg.Add(src);
+                    }
+
+                    foreach (IWebElement path in postLinksInContent)
+                    {
+                        if (!(path.GetAttribute("href") == null))
+                        {
+                            postLinks.Add(path.GetAttribute("href"));
+                        }
+                    }
+
+                    content = postText.Text;
+                    source = postSourceImg;
+                    links = postLinks;
+
+                    
+                    ContexPosts.Add(new News{Content = content, Source = source, Links = links});
+
+                    IWebElement closePost = Browser.FindElement(By.CssSelector(".wk_right_nav.no_select"));
+                    closePost.Click();
+                    System.Threading.Thread.Sleep(300);
                 }
-                else if (
-                    links.GetAttribute("src") != null ||
-                    links.GetAttribute("src") != ""
-                )
-                {
-                    postSourceImg.Add(links.GetAttribute("src"));
-                }
+                Content = content;
+                Source = source;
+                Links = links;       
             }
-
-            Article = postArticleFind.Text;
-            Content = postContentFind.Text;
-            Source = postSourceImg;
-            Links = postLinks;
-
         }
     }
 }

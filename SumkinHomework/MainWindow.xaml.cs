@@ -28,35 +28,64 @@ namespace SumkinHomework
     public partial class MainWindow : Window
     {
         public static IWebDriver Browser;
-        public static IWebDriver Browser1;
-        String pathToJSON = @"C:\Users\Sepon\source\repos\SumkinHomework\SumkinHomework\bin\Debug/post.json";
+        public String pathToJSON = @"C:\Users\Senco\source\repos\SumkinHomework\SumkinHomework\bin\Debug/post";
         public MainWindow()
         {
             InitializeComponent();
+           
         }
-        private void test() 
+        private void FirstThread() 
         {
-            Browser1 = new OpenQA.Selenium.Chrome.ChromeDriver();
-            Browser1.Manage().Window.Maximize();
-
-            Browser1.Navigate().GoToUrl("https://habr.com/en");
-
+           
         }
+        private void SecondThread()
+        {
+           
+        }
+        private void ThirdThread()
+        {
+            
+        }
+        private void FourthThread()
+        {
+/*            Browser4 = new OpenQA.Selenium.Chrome.ChromeDriver();
+            Browser4.Manage().Window.Maximize();
 
+            Browser4.Navigate().GoToUrl("https://habr.com/en/top/monthly/");
+
+            LaunchMultiThread(Browser4, "4");*/
+        }
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Thread th = new Thread(test);
-            th.Start();
-
             Browser = new OpenQA.Selenium.Chrome.ChromeDriver();
             Browser.Manage().Window.Maximize();
 
-            Browser.Navigate().GoToUrl("https://habr.com/en/top/weekly/");
+            Browser.Navigate().GoToUrl("https://vk.com/awdee");
+
+            List<IWebElement> elements = Browser.FindElements(By.CssSelector(".wall_post_cont._wall_post_cont")).ToList();
+            
+            if (disMult.IsChecked == false)
+            {
+                
+            } else{
+
+                News currentStack = new News(Browser);
+
+                JsonSerializer serializer = new JsonSerializer();
+                string output = JsonConvert.SerializeObject(currentStack);
+
+                using (StreamWriter sw = new StreamWriter(pathToJSON + "1.json"))
+                using (JsonWriter writer = new JsonTextWriter(sw))
+                {
+                    serializer.Serialize(writer, output);
+                }
+            }
+
         }
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         { 
-            List<IWebElement> elements = Browser1.FindElements(By.CssSelector(".content-list__item_post article h2 a")).ToList();
+/*            List<IWebElement> elements = Browser1.FindElements(By.CssSelector(".content-list__item_post article h2 a")).ToList();
             elements[1].Click();
 
             System.Threading.Thread.Sleep(1000);
@@ -78,7 +107,7 @@ namespace SumkinHomework
             {
                 serializer.Serialize(writer, output);
             }
-
+*/
         }
 
         private void Button_Click_2(object sender, RoutedEventArgs e)
@@ -86,7 +115,6 @@ namespace SumkinHomework
             String json = JsonConvert.DeserializeObject<String>(File.ReadAllText(pathToJSON));
             News post = JsonConvert.DeserializeObject<News>(json);
 
-            textBox1.AppendText(post.Article);
             textBox2.AppendText(post.Content);
 
             post.Links.ForEach(x => textBox3.AppendText("\n Cсылка:" + x + "\n"));
@@ -94,4 +122,5 @@ namespace SumkinHomework
         }  
 
         }
+
 }
